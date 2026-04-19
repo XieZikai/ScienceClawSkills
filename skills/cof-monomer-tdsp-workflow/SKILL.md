@@ -1,5 +1,5 @@
 ---
-name: cof-monomer-descriptors
+name: cof-monomer-tdsp-workflow
 description: Remote-ready workflow for generating COF monomer chemical descriptors from SMILES strings. Use when Gaussian g16 must run on a supercomputer via HTTP API, Multiwfn is available locally, and you need to extract descriptors (CDFT, TDSP, hole-electron metrics) with the djh toolkit.
 ---
 

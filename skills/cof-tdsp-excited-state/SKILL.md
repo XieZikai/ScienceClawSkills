@@ -1,5 +1,5 @@
 ---
-name: cof-tdsp-excited-state
+name: cof-cof-tdsp-excited-state
 description: End-to-end excited-state workflow for COF dimers: freeze-all-but-H optimization, TD-DFT (Gaussian 16), Multiwfn hole-electron analysis, and fragment-resolved contributions. Use when the `calculate_mols` dimer fragments need PL/TDSP descriptors.
 ---
 
@@ -41,7 +41,7 @@ The sections below detail each phase and reference the supporting skills.
 ## Step 1 – Freeze-all-but-H optimization
 1. **Generate constrained GJF files**
    ```bash
-   cd skills/cof-tdsp-excited-state
+   cd skills/cof-cof-tdsp-excited-state
    python scripts/freezexyz2gjf.py path/to/calculate_mols/dimer_xxx.xyz --out opt_gjfs/
    ```
    - The script sets `Opt` with ModRedundant-like flags: H atoms flagged `0` (relaxed), heavy atoms `-1` (frozen). Adjust `method="B3LYP/6-31G* em=gd3bj"` if needed.
@@ -62,7 +62,7 @@ The sections below detail each phase and reference the supporting skills.
 ## Step 2 – TDSP (excited-state) Gaussian jobs
 1. **Prepare TD inputs**
    ```bash
-   cd skills/cof-tdsp-excited-state
+   cd skills/cof-cof-tdsp-excited-state
    python scripts/xyz2gjf_dimertdsp.py path/to/opt/dimer_xxx.xyz
    ```
    - Default route: `#P PBE1PBE/def2SVP nosymm td(nstates=5,root=1) iop(9/40=4)`.
@@ -84,7 +84,7 @@ The sections below detail each phase and reference the supporting skills.
 1. Copy the `.mol` files corresponding to the analyzed dimers into `tdsp_dimer/` (names must match `dimer_xxx.mol`).
 2. Run the aggregator:
    ```bash
-   cd skills/cof-tdsp-excited-state
+   cd skills/cof-cof-tdsp-excited-state
    python scripts/td_compos.py > tdsp_dimer/frag_compos.csv
    ```
    - The script locates all `*.mol`, matches `*.he.txt`, splits the imine bond, and sums hole/electron percentages per fragment. Output CSV columns: `pfxnam,ald_hole_pct,ami_hole_pct,ald_electron_pct,ami_electron_pct`.

@@ -1,6 +1,6 @@
 ---
 name: cof-dimer-tdsp-workflow
-description: Orchestrate the full COF dimer excited-state pipeline by chaining `dimer-mol2cif`, `cof-remote-optimizer`, `cof-dimer-fragment`, and `tdsp-excited-state`. Use when you need end-to-end TD descriptors starting from monomer .mol files.
+description: Orchestrate the full COF dimer excited-state pipeline by chaining `dimer-mol2cif`, `cof-remote-optimizer`, `cof-dimer-fragment`, and `cof-tdsp-excited-state`. Use when you need end-to-end TD descriptors starting from monomer .mol files.
 ---
 
 # COF Dimer TDSP Workflow
@@ -13,16 +13,16 @@ This process skill stitches together the four specialized skills you already hav
   1. `dimer-mol2cif`
   2. `cof-remote-optimizer`
   3. `cof-dimer-fragment`
-  4. `tdsp-excited-state`
+  4. `cof-tdsp-excited-state`
 - Remote services configured for DFTB, Gaussian 16, and Multiwfn via the respective skills those steps depend on.
 
 ## Data handoff map
-| Stage | Skill | Key Inputs | Key Outputs | Next Stage consumes |
-| --- | --- | --- | --- | --- |
-| 1 | `dimer-mol2cif` | `ald-*.mol`, `ami-*.mol` | `initial_cifs/*.cif` | Stage 2 |
-| 2 | `cof-remote-optimizer` | `initial_cifs/*.cif` | `optimized_cifs/*_dftb_opted.cif`, `mace_results/*.cif` | Stage 3 |
-| 3 | `cof-dimer-fragment` | Optimized CIFs + monomer manifest (`training-transfer-0129.txt`) | `calculate_mols/dimer_*.mol`, `dimer_*.xyz` | Stage 4 |
-| 4 | `tdsp-excited-state` | `calculate_mols` folder | `opt/`, `tdsp_dimer/`, `frag_compos.csv` | Final results |
+| Stage | Skill                    | Key Inputs | Key Outputs | Next Stage consumes |
+| --- |--------------------------| --- | --- | --- |
+| 1 | `dimer-mol2cif`          | `ald-*.mol`, `ami-*.mol` | `initial_cifs/*.cif` | Stage 2 |
+| 2 | `cof-remote-optimizer`   | `initial_cifs/*.cif` | `optimized_cifs/*_dftb_opted.cif`, `mace_results/*.cif` | Stage 3 |
+| 3 | `cof-dimer-fragment`     | Optimized CIFs + monomer manifest (`training-transfer-0129.txt`) | `calculate_mols/dimer_*.mol`, `dimer_*.xyz` | Stage 4 |
+| 4 | `cof-tdsp-excited-state` | `calculate_mols` folder | `opt/`, `tdsp_dimer/`, `frag_compos.csv` | Final results |
 
 ## Step-by-step execution
 
@@ -44,7 +44,7 @@ This process skill stitches together the four specialized skills you already hav
    - Filter/match against the manifest to populate `calculate_mols/dimer_*.mol` & `.xyz`.
 3. Validate coverage: every target (ald, ami) combo destined for spectral analysis should now have a corresponding entry in `calculate_mols/`.
 
-### 4. TD excited-state computations (`tdsp-excited-state`)
+### 4. TD excited-state computations (`cof-tdsp-excited-state`)
 1. Use the tdsp skill you just renamed to run hydrogen-only optimizations, TDSP Gaussian jobs, Multiwfn analyses, and fragment composition aggregation.
 2. Ensure the remote Gaussian + Multiwfn skills are called for every task; capture `frag_compos.csv` plus per-dimer `.he.txt` files as deliverables.
 
