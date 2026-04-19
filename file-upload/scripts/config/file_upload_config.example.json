@@ -1,0 +1,8 @@
+{
+  "upload_endpoint": "http://114.214.211.25:30082/api/file/upload",
+  "file_field_name": "file",
+  "timeout_seconds": 120,
+  "extra_headers": {
+    "User-Agent": "Mozilla/5.0 (skill:file-upload)"
+  }
+}
